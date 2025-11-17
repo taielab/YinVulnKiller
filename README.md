@@ -621,7 +621,7 @@ open dirScan.csv       # Excel 分析
 - **GitHub**: [https://github.com/taielab](https://github.com/taielab)
 - **微信公众号**: AI安全工坊
 
-![wxgzh](/Users/taielab/Desktop/AI%E5%BC%80%E5%8F%91%E9%A1%B9%E7%9B%AE/%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E9%A1%B9%E7%9B%AE/YinVulnKiller/images/wxgzh.png)
+![wxgzh](./images/wxgzh.png)
 
 ---
 
