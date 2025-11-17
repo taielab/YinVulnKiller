@@ -4,15 +4,14 @@
 
 **企业级漏洞扫描与资产测绘平台**
 
-[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/taielab/YinVulKiller)
+[![Version](https://img.shields.io/badge/version-1.3.0-blue.svg)](https://github.com/taielab/YinVulKiller)
 [![Go Version](https://img.shields.io/badge/Go-1.19+-00ADD8.svg)](https://golang.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/taielab/YinVulKiller?style=social)](https://github.com/taielab/YinVulnKiller/stargazers)
+[![Stars](https://img.shields.io/github/stars/taielab/YinVulKiller?style=social)](https://github.com/taielab/YinVulKiller/stargazers)
 
 **开发者**: [AI安全工坊](https://github.com/taielab) | **微信公众号**: AI安全工坊
 
-<img src="https://img.shields.io/badge/POC库-13054+-red.svg" alt="POC Count"/>
-<img src="https://img.shields.io/badge/POC引擎-4个-brightgreen.svg" alt="POC Engines"/>
+<img src="https://img.shields.io/badge/POC库-12492+-red.svg" alt="POC Count"/>
 <img src="https://img.shields.io/badge/指纹库-6400+-orange.svg" alt="Fingerprint Count"/>
 <img src="https://img.shields.io/badge/弱口令-40+-yellow.svg" alt="Weak Password"/>
 
@@ -22,18 +21,16 @@
 
 ## 📖 简介
 
-**YinVulnKiller** 是一款功能强大的企业级漏洞扫描与资产测绘工具，集成了主机存活探测、端口扫描、服务识别、指纹识别、漏洞检测、弱口令爆破等多种功能。
+**YinVulKiller** 是一款功能强大的企业级漏洞扫描与资产测绘工具，集成了主机存活探测、端口扫描、服务识别、指纹识别、漏洞检测、弱口令爆破等多种功能。
 
 ### 🎯 核心特性
 
-- 🚀 **四引擎 POC 检测**：集成 Nuclei + Xray + GoPOC + YamlPOC 四大引擎，13,054+ POC 规则
-- ⚡ **极速并发扫描**：Worker Pool架构 + 指纹分组优化，扫描速度提升35-70倍
-- 💡 **实时漏洞输出**：发现漏洞立即显示，无需等待扫描完成
+- 🚀 **三引擎 POC 检测**：集成 Xray + Nuclei + GoPOC 三大引擎，12,492+ POC 规则
 - 🔍 **深度服务识别**：基于 Gonmap/Nmap 探针库，6000+ 服务指纹
 - 🌐 **全面资产扫描**：支持 IP/CIDR/URL 多种目标格式，智能并发调度
 - 📂 **目录扫描模块**：内置双字典（31,094 + 1,613 条路径），快速发现隐藏目录
 - 🎨 **多格式报告**：Excel/HTML 双格式报告，自动截图，可视化展示
-- 🔐 **40+ 弱口令模块**：覆盖 SSH、RDP、MySQL、PostgreSQL 等主流服务（优化超时控制，防止卡死）
+- 🔐 **40+ 弱口令模块**：覆盖 SSH、RDP、MySQL、PostgreSQL 等主流服务
 - 🧩 **640+ 指纹规则**：精准识别 Web 框架、中间件、CMS 系统
 - 🌍 **内网穿透**：Spy 网段探测 + 代理支持，适配复杂网络环境
 - 📦 **POC 外部化管理**：支持自定义 POC 规则，无需重新编译
@@ -46,39 +43,24 @@
 
 | 引擎 | POC 数量 | 特点 |
 |------|----------|------|
-| **Nuclei** | 11,581+ | 社区驱动，覆盖最新 CVE，实时更新 |
 | **Xray** | 911+ | 高精度漏洞检测，支持自定义 YAML 规则 |
-| **YamlPOC** | 562+ | 自定义YAML POC，含110个自动转换的旧格式POC |
+| **Nuclei** | 11,581+ | 社区驱动，覆盖最新 CVE |
 | **GoPOC** | 基于指纹 | 自动匹配指纹执行相应 POC |
 
-**总计**: **13,054+ POC 规则** 🔥
-
-**性能优化**:
-- ⚡ Worker Pool并发架构，多目标并行扫描
-- 🚀 指纹分组批量处理，避免重复初始化
-- 💡 实时漏洞输出，发现即显示
-- 📊 88个目标扫描从176-352分钟降至5-10分钟（**35-70倍提速**）
+**总计**: **12,492+ POC 规则** 🔥
 
 ### 2. 🔍 精准的服务识别
 
 - **Gonmap 深度识别**：基于 Nmap 探针库，6000+ 服务指纹
-- **Web 指纹识别**：640+ Web 组件指纹（框架、CMS、中间件）
+- **Web 指纹识别**：27000+ Web 组件指纹（框架、CMS、中间件）
 - **协议自动识别**：自动判断 HTTP/HTTPS/SSH/RDP/MySQL 等协议
+- **📌 新增协议支持**：Cassandra、Kafka、Neo4j、Elasticsearch、Memcached、LDAP（11个端口映射）
 
-### 3. 🚀 高性能并发架构（35-70倍提速）
+### 3. 🚀 高性能并发架构
 
-**核心优化技术**：
-- **Worker Pool 架构**：多目标并发扫描，充分利用多核CPU
-- **指纹分组批量处理**：相同指纹目标合并扫描，避免重复初始化
-- **引擎并行执行**：4个POC引擎同时运行，独立上下文管理
 - **智能并发调度**：根据 CPU 核心数和目标规模动态调整
-- **单任务超时控制**：防止SMB等服务卡死（15秒超时）
-- **实时漏洞输出**：发现漏洞立即显示，无需等待扫描完成
-
-**性能数据**：
-- 88个目标串行扫描：176-352分钟
-- 优化后并发扫描：5-10分钟
-- **速度提升：35-70倍** 🚀
+- **分布式引擎**：Nuclei 引擎支持分布式任务，避免资源冲突
+- **上下文超时控制**：防止扫描卡死，自动超时清理
 
 ### 4. 🌍 复杂网络支持
 
@@ -90,12 +72,6 @@
 
 ## 🚀 快速开始
 
-### 环境要求
-
-- **Go**: 1.19 或更高版本
-- **操作系统**: Linux / macOS / Windows
-- **权限**: 端口扫描可能需要 root/管理员权限
-
 ### 基础扫描示例
 
 ```bash
@@ -105,14 +81,14 @@
 # 2. 扫描整个 C 段（TOP500 端口）
 ./yinvulkiller scan -i 192.168.1.0/24 -p top500 --noping
 
-# 3. 扫描指定 URL（使用所有引擎）
-./yinvulkiller scan -u https://example.com --engines all
+# 3. 扫描指定 URL
+./yinvulkiller scan -u https://example.com
 
 # 4. 批量扫描 URL 文件
-./yinvulkiller scan --urlfile urls.txt --engines all
+./yinvulkiller scan --urlfile urls.txt
 
 # 5. 使用 Nuclei 引擎深度扫描
-./yinvulkiller scan -u http://target.com --engines nuclei --nuclei-severity critical,high
+./yinvulkiller scan -u http://target.com --engine nuclei
 
 # 6. 使用代理扫描
 ./yinvulkiller scan -i 8.8.8.8 -p top100 --proxy http://127.0.0.1:8080
@@ -184,15 +160,13 @@ YinVulKiller 内置专业目录扫描功能，支持双字典选择：
 - 📊 **JSON** - 机器可读（API/脚本集成）
 - 📑 **CSV** - Excel/WPS 打开（数据分析）
 - 🌐 **HTML** - 浏览器查看（带样式、搜索、高亮）
-```
 
 **字典对比**：
-| 字典类型 | 路径数量 | 适用场景 |
-|---------|---------|---------|
-| 默认字典 (url.txt) | 31,094 条 | 全面目录审计 |
-| **高危字典 (url-high.txt)** | **1,613 条** | **快速发现高危路径** 🔥 |
 
-**完整文档**: [dirscan/README.md](dirscan/README.md)
+| 字典类型                    | 路径数量     | 适用场景               |
+| --------------------------- | ------------ | ---------------------- |
+| 默认字典 (url.txt)          | 31,094 条    | 全面目录审计           |
+| **高危字典 (url-high.txt)** | **1,613 条** | **快速发现高危路径** 🔥 |
 
 ### 🌍 内网探测（Spy 模式）
 
@@ -213,27 +187,18 @@ YinVulKiller 内置专业目录扫描功能，支持双字典选择：
 ### 🎯 POC 引擎选择
 
 ```bash
-# 1. 仅使用 Nuclei 引擎（11,581+ POC，覆盖最新CVE）
-./yinvulkiller scan -u http://target.com --engines nuclei
+# 1. 仅使用 Xray 引擎（速度快）
+./yinvulkiller scan -u http://target.com --engine xray
 
-# 2. 仅使用 Xray 引擎（911+ POC，高精度）
-./yinvulkiller scan -u http://target.com --engines xray
+# 2. 仅使用 Nuclei 引擎（规则全）
+./yinvulkiller scan -u http://target.com --engine nuclei
 
-# 3. 仅使用 YamlPOC 引擎（562+ POC，含自动转换旧格式）
-./yinvulkiller scan -u http://target.com --engines yamalpoc
+# 3. 同时使用两个引擎（默认）
+./yinvulkiller scan -u http://target.com --engine both
 
-# 4. 仅使用 GoPOC 引擎（基于指纹智能匹配）
-./yinvulkiller scan -u http://target.com --engines gopoc
-
-# 5. 使用多个引擎组合
-./yinvulkiller scan -u http://target.com --engines nuclei,xray,yamalpoc
-
-# 6. 使用所有引擎（推荐，最全面）🔥
-./yinvulkiller scan -u http://target.com --engines all
-
-# 7. Nuclei 高级参数（过滤标签和严重程度）
+# 4. Nuclei 高级参数
 ./yinvulkiller scan -u http://target.com \
-  --engines nuclei \
+  --engine nuclei \
   --nuclei-tags cve,rce,sqli \
   --nuclei-severity critical,high \
   --nuclei-concurrency 50
@@ -241,13 +206,7 @@ YinVulKiller 内置专业目录扫描功能，支持双字典选择：
 
 ### 🔐 弱口令检测
 
-### 弱口令检测优化
-
-**最新优化**：
-- ✅ 单任务超时控制（15秒），防止SMB等服务卡死
-- ✅ 限制最大并发数为20，避免连接过多被拒绝
-- ✅ 使用Slice存储结果，避免凭据覆盖丢失
-- ✅ 保证扫描结果一致性和完整性
+支持 **40+ 种服务** 的弱口令检测：
 
 ```bash
 # 启用 RDP 弱口令扫描（注意账号锁定风险）
@@ -259,16 +218,16 @@ YinVulKiller 内置专业目录扫描功能，支持双字典选择：
   --passwdfile passwords.txt
 ```
 
-**支持的服务（40+）**：
-- **远程访问**: SSH, RDP, Telnet, VNC
-- **数据库**: MySQL, PostgreSQL, Oracle, MSSQL, MongoDB, Redis, Memcached
-- **Web 服务**: Tomcat, WebLogic, JBoss, Zabbix, Grafana
-- **其他**: FTP, SMB, SNMP, LDAP 等
+**⚠️ 智能去重保障**：最新版本已实现账户级去重机制，每个账户只记录首个成功密码，避免重复结果！
 
-**注意事项**：
-- ⚠️ RDP扫描可能导致账号锁定，生产环境慎用
-- ✅ SMB扫描已优化超时控制，不会卡死
-- ✅ 结果存储优化，避免凭据丢失
+**支持的服务**：
+- **远程访问**: SSH, RDP, Telnet, VNC
+- **数据库**: MySQL, PostgreSQL, Oracle, MSSQL, MongoDB, Redis, Memcached, **Cassandra**, **Neo4j**, **Elasticsearch**
+- **SMB 协议**: SMB v1 (445), SMB 2.0/2.1/3.0/3.1.1 (445) - **智能双版本认证**
+- **消息队列**: **RabbitMQ**, **Kafka**, **ActiveMQ**
+- **Web 服务**: Tomcat, WebLogic, JBoss, Zabbix, Grafana
+- **邮件协议**: SMTP, IMAP, POP3
+- **其他**: FTP, SNMP, **LDAP**, Rsync, Modbus
 
 ---
 
@@ -280,54 +239,41 @@ YinVulKiller 支持 **POC 外部化管理**，允许用户自由添加/删除/�
 
 ```
 pocs/
-├── nuclei/        # 11,581+ Nuclei 模板（最新CVE）
-│   ├── http/
-│   │   ├── cves/
-│   │   ├── vulnerabilities/
-│   │   └── ...
-│   ├── dns/
-│   ├── network/
-│   └── ...
 ├── xray/          # 911+ Xray POC 规则（YAML 格式）
 │   ├── CVE-2021-44228-log4j.yaml
 │   ├── Shiro-550.yaml
 │   └── ...
-└── yaml-poc/      # 562+ YamlPOC 规则（含110个自动转换旧格式）
-    ├── poc-yaml-springboot-env-unauth.yaml
-    ├── poc-yaml-thinkphp-5023-rce.yaml
+└── nuclei/        # 11,581+ Nuclei 模板
+    ├── http/
+    │   ├── cves/
+    │   ├── vulnerabilities/
+    │   └── ...
+    ├── dns/
+    ├── network/
     └── ...
 ```
 
 ### 自定义 POC
 
-#### 1. 添加 Nuclei 模板
-```bash
-# 添加 Nuclei 模板
-cp my-nuclei-template.yaml pocs/nuclei/http/vulnerabilities/
-
-# 使用特定标签过滤
-./yinvulkiller scan -u http://target.com --engines nuclei --nuclei-tags custom
-```
-
-#### 2. 添加 Xray POC
+#### 1. 添加 Xray POC
 ```bash
 # 添加自定义 POC 到 Xray 引擎
 cp my-custom-poc.yaml pocs/xray/
 
 # 重启扫描即可生效
-./yinvulkiller scan -u http://target.com --engines xray
+./yinvulkiller scan -u http://target.com
 ```
 
-#### 3. 添加 YamlPOC
+#### 2. 添加 Nuclei 模板
 ```bash
-# 添加自定义 YAML POC
-cp my-yaml-poc.yaml pocs/yaml-poc/
+# 添加 Nuclei 模板
+cp my-nuclei-template.yaml pocs/nuclei/http/vulnerabilities/
 
-# 自动支持新旧格式转换，无需修改
-./yinvulkiller scan -u http://target.com --engines yamalpoc
+# 使用特定标签过滤
+./yinvulkiller scan -u http://target.com --nuclei-tags custom
 ```
 
-#### 4. 删除不需要的 POC
+#### 3. 删除不需要的 POC
 ```bash
 # 删除单个 POC
 rm pocs/xray/unwanted-poc.yaml
@@ -354,10 +300,9 @@ ScanLog/
 
 ### 报告内容
 
-- ✅ **实时漏洞输出**：发现漏洞时立即显示在终端，无需等待扫描完成
 - ✅ **存活主机列表**：IP、端口、服务、操作系统
 - ✅ **漏洞详情**：CVE 编号、严重程度、POC 信息、HTTP 请求/响应
-- ✅ **弱口令列表**：服务、用户名、密码（优化存储，避免凭据丢失）
+- ✅ **弱口令列表**：服务、用户名、密码
 - ✅ **指纹识别**：Web 框架、CMS、中间件版本
 - ✅ **Web 截图**：自动截图存档
 
@@ -460,15 +405,15 @@ echo "192.168.1.254" > exclude.txt
 
 | 参数 | 说明 | 默认值 |
 |------|------|--------|
-| `--engines` | 引擎选择（nuclei/xray/gopoc/yamalpoc/all，多个用逗号分隔） | - |
+| `--engine` | 引擎选择（xray/nuclei/both） | both |
 | `--xray-poc-name` | Xray POC 名称过滤 | - |
 | `--xray-concurrency` | Xray POC 并发数 | 10 |
 | `--nuclei-tags` | Nuclei 标签过滤 | - |
-| `--nuclei-severity` | Nuclei 严重程度（info/low/medium/high/critical） | - |
+| `--nuclei-severity` | Nuclei 严重程度 | - |
 | `--nuclei-exclude-tags` | Nuclei 排除标签 | - |
 | `--nuclei-exclude-severity` | Nuclei 排除严重程度 | - |
 | `--nuclei-concurrency` | Nuclei 模板并发数 | 25 |
-| `--nuclei-rate-limit` | Nuclei 速率限制（请求/秒） | 150 |
+| `--nuclei-rate-limit` | Nuclei 速率限制 | 150 |
 
 ### Spy 探测参数
 
@@ -501,12 +446,9 @@ echo "192.168.1.254" > exclude.txt
 
 ### 场景 2：Web 应用漏洞挖掘
 ```bash
-# 使用所有引擎深度扫描 Web 应用（推荐）
-./yinvulkiller scan -u https://target.com --engines all
-
 # 使用 Nuclei 引擎深度扫描 Web 应用
 ./yinvulkiller scan -u https://target.com \
-  --engines nuclei \
+  --engine nuclei \
   --nuclei-tags cve,rce,sqli,xss \
   --nuclei-severity critical,high
 ```
@@ -575,42 +517,30 @@ open dirScan.csv       # Excel 分析
 
 ## 🔥 技术亮点
 
-### 1. 四引擎协同架构（13,054+ POC）
-- **Nuclei**：11,581+ POC，社区驱动、覆盖最新 CVE
-- **Xray**：911+ POC，高精度、低误报，适合生产环境
-- **YamlPOC**：562+ POC，自定义YAML格式，含110个自动转换的旧格式POC
-- **GoPOC**：基于指纹智能匹配，精准高效
+### 1. 多引擎协同架构
+- **Xray**：高精度、低误报，适合生产环境
+- **Nuclei**：社区驱动、覆盖最新 CVE
+- **GoPOC**：基于指纹智能匹配
 
-### 2. 高性能并发架构（35-70倍提速）
-- **Worker Pool 架构**：多目标并发扫描，充分利用多核CPU
-- **指纹分组批量处理**：相同指纹目标合并扫描，避免重复初始化
-- **引擎并行执行**：4个POC引擎同时运行，独立上下文管理
-- **实时漏洞输出**：发现漏洞立即显示，无需等待扫描完成
-- **性能提升实测**：88个目标从176-352分钟降至5-10分钟
+### 2. 分布式引擎管理
+- 每个任务独立引擎，避免资源冲突
+- 上下文超时控制，自动清理
+- 线程安全设计，支持高并发
 
 ### 3. POC 外部化管理
 - YAML 格式 POC，易于编写和维护
 - 无需重新编译，即时生效
 - 支持社区规则导入
-- YamlPOC自动转换旧格式，兼容性强
 
 ### 4. 智能并发调度
 - 根据 CPU 核心数动态调整
 - 速率限制防止 DDoS 误触发
 - 分阶段并发：端口扫描 → 服务识别 → POC 检测
-- 单任务超时控制，防止扫描卡死
 
 ### 5. 全面报告系统
 - Excel + HTML 双格式
 - 自动截图存档
 - 可视化漏洞统计
-- 实时漏洞输出到终端
-
-### 6. 弱口令检测优化
-- 单任务超时控制（15秒），防止SMB等服务卡死
-- 限制最大并发数为20，避免连接拒绝
-- 使用Slice存储结果，避免凭据覆盖丢失
-- 保证扫描结果一致性和完整性
 
 ---
 
@@ -622,6 +552,45 @@ open dirScan.csv       # Excel 分析
 - ❌ 禁止用于：未授权的漏洞扫描、网络攻击、数据窃取
 
 **使用本工具造成的任何法律责任，均由使用者自行承担，与软件作者无关。**
+
+---
+
+## 🔄 最近更新
+
+### Version 2.0.0 (2025-11)
+
+**🚀 重大更新**：
+- 🔥 **新增 SMB2/SMB3 协议支持** - 完整支持 SMB 2.0/2.1/3.0/3.1.1 协议弱口令扫描
+  - 使用 `projectdiscovery/go-smb2` 库实现
+  - 智能双版本认证：自动尝试 SMB v1 和 SMB2/SMB3
+  - 管理员权限验证（C$ 共享挂载测试）
+  - 账户锁定检测与保护机制
+  - 共享枚举功能
+- 🛡️ **新增 SMBGhost (CVE-2020-0796) 漏洞检测** - 自动检测 Windows 10 1903/1909 远程代码执行漏洞
+  - 被动检测，不触发漏洞利用
+  - 445 端口自动检测
+  - 精准协议协商分析
+
+**💡 技术亮点**：
+- ✅ SMB v1 和 SMB2/SMB3 双版本并行认证，兼容所有 Windows 版本
+- ✅ Windows 10 1709+ 默认禁用 SMBv1，SMB2/SMB3 成为主流
+- ✅ 去重机制确保每个账户只记录首个成功密码
+
+**🐛 Bug修复**：
+
+- ✅ 修复弱口令扫描去重问题 - 每个账户只记录首个成功密码
+- ✅ 修复Rsync服务弱口令扫描未生效的问题
+- ✅ 优化服务识别逻辑，提升准确性
+
+**✨ 新增功能**：
+- 📌 新增 6 种协议支持：Cassandra、Kafka、Neo4j、Elasticsearch、Memcached、LDAP
+- 📌 新增 11 个端口映射，提升协议识别覆盖率
+- 📖 新增快速开始指南（QUICKSTART.md）- 5分钟快速上手
+
+**🔧 优化改进**：
+- ⚡ 优化弱口令扫描性能和稳定性
+- ⚡ 完善服务协议识别机制
+- 📝 完善项目文档和使用说明
 
 ---
 
@@ -652,6 +621,8 @@ open dirScan.csv       # Excel 分析
 - **GitHub**: [https://github.com/taielab](https://github.com/taielab)
 - **微信公众号**: AI安全工坊
 
+![wxgzh](/Users/taielab/Desktop/AI%E5%BC%80%E5%8F%91%E9%A1%B9%E7%9B%AE/%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E9%A1%B9%E7%9B%AE/YinVulnKiller/images/wxgzh.png)
+
 ---
 
 ## 📄 开源许可
@@ -668,7 +639,7 @@ open dirScan.csv       # Excel 分析
 - [Xray](https://github.com/chaitin/xray) - 长亭科技的安全评估工具
 - [Gonmap](https://github.com/lair-framework/go-nmap) - Go 语言 Nmap 扫描器
 - [Fscan](https://github.com/shadow1ng/fscan) - 内网综合扫描工具
-- [Golin](https://github.com/selinuxG/Golin) - 内网基线综合扫描工具
+- [Golin](https://github.com/selinuxG/Golin) - 内网综合扫描工具
 
 ---
 
