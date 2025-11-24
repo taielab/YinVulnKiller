@@ -4,7 +4,7 @@
 
 **企业级漏洞扫描与资产测绘平台**
 
-[![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)](https://github.com/taielab/YinVulKiller)
+[![Version](https://img.shields.io/badge/version-2.2.0-blue.svg)](https://github.com/taielab/YinVulKiller)
 [![Go Version](https://img.shields.io/badge/Go-1.19+-00ADD8.svg)](https://golang.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Stars](https://img.shields.io/github/stars/taielab/YinVulKiller?style=social)](https://github.com/taielab/YinVulKiller/stargazers)
@@ -12,10 +12,12 @@
 **开发者**: [AI安全工坊](https://github.com/taielab) | **微信公众号**: AI安全工坊
 
 <img src="https://img.shields.io/badge/POC库-12492+-red.svg" alt="POC Count"/>
-<img src="https://img.shields.io/badge/指纹库-27000+-orange.svg" alt="Fingerprint Count"/>
+<img src="https://img.shields.io/badge/指纹库-640+-orange.svg" alt="Fingerprint Count"/>
 <img src="https://img.shields.io/badge/弱口令-30+-yellow.svg" alt="Weak Password"/>
 
 </div>
+
+![](./images/wxgzh.png)
 
 ---
 
@@ -32,7 +34,7 @@
 - 📂 **目录扫描模块**：内置双字典（31,094 + 1,613 条路径），快速发现隐藏目录
 - 🎨 **多格式报告**：Excel/HTML 双格式报告，自动截图，可视化展示
 - 🔐 **30+ 弱口令模块**：覆盖 SSH、RDP、MySQL、PostgreSQL、SMB2/SMB3 等主流服务
-- 🧩 **27000+ 指纹规则**：精准识别 Web 框架、中间件、CMS 系统
+- 🧩 **640+ 指纹规则**：精准识别 Web 框架、中间件、CMS 系统
 - 🌍 **内网穿透**：Spy 网段探测 + 代理支持，适配复杂网络环境
 - 📦 **POC 外部化管理**：支持自定义 POC 规则，无需重新编译
 
@@ -59,8 +61,10 @@
 
 ### 3. 🚀 高性能并发架构
 
+- **两级并发模型**：目标级并发 + POC/路径级并发，充分利用多核性能
 - **智能并发调度**：根据 CPU 核心数和目标规模动态调整
 - **分布式引擎**：Nuclei 引擎支持分布式任务，避免资源冲突
+- **Worker Pool 模式**：PocRunner 和 DirSearch 采用工作池模式，性能提升 5-12 倍
 - **上下文超时控制**：防止扫描卡死，自动超时清理
 
 ### 4. 🛰️ 网络空间测绘集成
@@ -140,7 +144,7 @@
 
 #### 6. 目录扫描模式
 
-YinVulKiller 内置专业目录扫描功能，支持双字典选择：
+YinVulKiller 内置专业目录扫描功能，支持双字典选择和批量并发扫描：
 
 ```bash
 # 使用默认字典（31,094 条路径）
@@ -149,6 +153,9 @@ YinVulKiller 内置专业目录扫描功能，支持双字典选择：
 # 使用高危字典（1,613 条高风险路径）⭐ 推荐
 ./yinvulkiller dirsearch -u http://example.com --dict-type high
 
+# 批量扫描多个目标（从文件读取）
+./yinvulkiller dirsearch --urlfile urls.txt -w 10  # 10个目标并发
+
 # 自定义字典
 ./yinvulkiller dirsearch -u http://example.com -f custom.txt
 
@@ -156,6 +163,12 @@ YinVulKiller 内置专业目录扫描功能，支持双字典选择：
 ./yinvulkiller dirsearch -u http://example.com --dict-type high \
   -c 100 --code "200,403,500" \
   -p socks5://127.0.0.1:1080
+
+# 高并发批量扫描（推荐配置）
+./yinvulkiller dirsearch --urlfile urls.txt \
+  -w 10 \                    # 10个目标同时扫描
+  -c 100 \                   # 每个目标100路径并发
+  --dict-type high           # 使用高危字典
 
 # 指定输出格式（默认: txt,json）
 ./yinvulkiller dirsearch -u http://example.com -o html         # HTML 可视化报告
@@ -449,15 +462,33 @@ echo "192.168.1.254" > exclude.txt
 
 | 参数 | 说明 | 默认值 |
 |------|------|--------|
-| `--engine` | 引擎选择（xray/nuclei/both） | both |
-| `--xray-poc-name` | Xray POC 名称过滤 | - |
-| `--xray-concurrency` | Xray POC 并发数 | 10 |
+| `--engines` | 引擎选择（gopoc/pocrunner/nuclei/all） | all |
+| `--poc-name` | POC 名称过滤（支持模糊匹配） | - |
+| `--poc-concurrency` | POC 扫描目标并发数 | 5 |
+| `--pocrunner-concurrency` | PocRunner POC 并发数（每个目标） | 25 |
+| `--pocrunner-host-concurrency` | PocRunner 目标并发数（同时扫描） | 5 |
 | `--nuclei-tags` | Nuclei 标签过滤 | - |
 | `--nuclei-severity` | Nuclei 严重程度 | - |
 | `--nuclei-exclude-tags` | Nuclei 排除标签 | - |
 | `--nuclei-exclude-severity` | Nuclei 排除严重程度 | - |
 | `--nuclei-concurrency` | Nuclei 模板并发数 | 25 |
-| `--nuclei-rate-limit` | Nuclei 速率限制 | 150 |
+| `--nuclei-rate-limit` | Nuclei 速率限制（请求/秒） | 150 |
+
+### 目录扫描参数
+
+| 参数 | 说明 | 默认值 |
+|------|------|--------|
+| `-u, --url` | 单个目标 URL | - |
+| `--urlfile` | URL 文件（批量扫描） | - |
+| `-w, --url-workers` | URL 级别并发数（同时扫描的目标数） | 5 |
+| `-c, --chan` | 路径级别并发数（每个目标的并发） | 30 |
+| `-f, --file` | 自定义字典文件 | - |
+| `--dict-type` | 字典类型（default/high） | default |
+| `--code` | 状态码过滤 | 200 |
+| `-o, --output-format` | 输出格式（txt/json/csv/html/all） | txt,json |
+| `-p, --proxy` | 代理地址 | - |
+| `-t, --timeout` | 超时时间（秒） | 10 |
+| `--wait` | 请求间隔（秒） | 0 |
 
 ### Spy 探测参数
 
@@ -584,6 +615,7 @@ open dirScan.csv       # Excel 分析
 - 支持社区规则导入
 
 ### 4. 智能并发调度
+- 两级并发模型：目标并发 × 任务并发
 - 根据 CPU 核心数动态调整
 - 速率限制防止 DDoS 误触发
 - 分阶段并发：端口扫描 → 服务识别 → POC 检测
@@ -608,7 +640,33 @@ open dirScan.csv       # Excel 分析
 
 ## 🔄 最近更新
 
-### Version 2.1.0 (2025-11)
+### Version 2.0.3 (2025-11)
+
+**⚡ 高并发性能优化**：
+- 🔥 **DirSearch 批量并发扫描** - 支持多目标同时扫描，性能提升 5 倍+
+  - 新增 `--url-workers` 参数控制目标级并发
+  - 新增 `--urlfile` 参数支持批量 URL 文件
+  - 两级并发模型：URL 并发 × 路径并发
+  - 线程安全结果收集，实时进度显示
+- 🔥 **PocRunner 两级并发架构** - Nuclei 风格的高效并发模型
+  - 新增 `HostConcurrency` 目标级并发控制
+  - Worker Pool 模式，性能提升 12.5 倍
+  - 默认配置：5 目标并发 × 25 POC 并发
+
+**🧹 配置清理**：
+- ✅ 移除未使用的 `fofaSize` 配置项
+- ✅ 清理废弃的配置生成代码
+
+**📊 性能对比**：
+
+| 场景 | 优化前 | 优化后 | 提升 |
+|------|--------|--------|------|
+| 100 个 URL 目录扫描 | 50 分钟 | 10 分钟 | **5x** |
+| 10 目标 × 1000 POC | 串行执行 | 并行执行 | **12.5x** |
+
+---
+
+### Version 2.0.2 (2025-11)
 
 **🛰️ 网络空间测绘集成**：
 - 🔥 **新增 FOFA 平台支持** - 完整的 FOFA API 集成，支持所有查询语法
@@ -635,7 +693,7 @@ open dirScan.csv       # Excel 分析
 
 ---
 
-### Version 2.0.0 (2025-11)
+### Version 2.0.1 (2025-11)
 
 **🚀 重大更新**：
 - 🔥 **新增 SMB2/SMB3 协议支持** - 完整支持 SMB 2.0/2.1/3.0/3.1.1 协议弱口令扫描
@@ -698,8 +756,7 @@ open dirScan.csv       # Excel 分析
 
 - **GitHub**: [https://github.com/taielab](https://github.com/taielab)
 - **微信公众号**: AI安全工坊
-
-![](./images/wxgzh.png)
+- ![](./images/wxgzh.png)
 
 ---
 
